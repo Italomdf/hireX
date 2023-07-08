@@ -20,13 +20,13 @@ void main() async {
   await Future.delayed(Duration(seconds: 0), () async {
     rota = await UtilRepository().determinaRotaInicial();
   });
-  runApp(TreinoGetX(
+  runApp(HireX(
     rota: rota,
   ));
 }
 
-class TreinoGetX extends StatelessWidget {
-  TreinoGetX({super.key, this.rota});
+class HireX extends StatelessWidget {
+  HireX({super.key, this.rota});
 
   String? rota;
 
