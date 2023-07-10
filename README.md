@@ -1,4 +1,4 @@
-# Hirex
+# HireX
 
 A new Flutter project.
 
