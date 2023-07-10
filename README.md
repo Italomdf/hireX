@@ -1,4 +1,4 @@
-# getx
+# Hirex
 
 A new Flutter project.
 
