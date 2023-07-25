@@ -20,5 +20,5 @@ samples, guidance on mobile development, and a full API reference.
 
 Tela Principal
 
-![Tela Principal]<img src="https://github.com/Italomdf/hireX/blob/2e9995d9b7c079d4248c59abe7758496c2ac7b63/assets/images/HireX.png" width="500" height="1000">
+<img src="https://github.com/Italomdf/hireX/blob/2e9995d9b7c079d4248c59abe7758496c2ac7b63/assets/images/HireX.png" width="500" height="1000">
 
