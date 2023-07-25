@@ -1,6 +1,6 @@
 # HireX
 
-A new Flutter project, for hiring engineers and architects. Features as rating/comments and a chat.
+A new Flutter project, for hiring engineers and architects. New features in production, as rating/comments and a chat.
 
 ## Getting Started
 
