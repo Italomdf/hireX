@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:getx/views/atualiza_perfil.dart';
 import 'package:getx/views/welcome_page.dart';
 import 'package:getx/widgets/bodies/home_professional_body.dart';
+import 'package:getx/widgets/home_drawer.dart';
 import 'package:getx/widgets/my_bottom_navBar.dart';
 
 class HomeProfessional extends StatefulWidget {
@@ -14,7 +13,6 @@ class HomeProfessional extends StatefulWidget {
 }
 
 class _HomeProfessionalState extends State<HomeProfessional> {
-  @override
   final FirebaseAuth _auth = FirebaseAuth.instance;
   _signOut() async {
     await _auth.signOut();
@@ -27,7 +25,10 @@ class _HomeProfessionalState extends State<HomeProfessional> {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        body: SafeArea(child: HomeProfessionalBody()),
+        drawer: const Drawer(
+          child: HomeDrawer(),
+        ),
+        body: const SafeArea(child: HomeProfessionalBody()),
         appBar: buildAppBar(),
         bottomNavigationBar: const MyBottomNavBar(),
         // ignore: prefer_const_constructors
@@ -45,11 +46,6 @@ class _HomeProfessionalState extends State<HomeProfessional> {
         ),
       ],
       elevation: 0,
-      leading: IconButton(
-          onPressed: () {
-            Get.to(() => const AtualizaPerfil());
-          },
-          icon: const Icon(Icons.menu_outlined)),
     );
   }
 }

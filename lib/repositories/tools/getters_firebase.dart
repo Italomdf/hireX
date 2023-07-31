@@ -12,6 +12,15 @@ class GettersFirebase {
     return data['nome'] as String?;
   }
 
+  Future<String?> getUserEmail() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    DocumentSnapshot snapshot = await users.doc(user!.uid).get();
+    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+    return data['email'] as String?;
+  }
+
   Future<String?> getUserSobreNome() async {
     User? user = FirebaseAuth.instance.currentUser;
     CollectionReference users = FirebaseFirestore.instance.collection('users');
