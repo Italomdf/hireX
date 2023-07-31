@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:getx/repositories/get_image_perfil.dart';
+import 'package:getx/repositories/tools/getters_firebase.dart';
 import 'package:getx/repositories/tools/rep_util.dart';
 import 'package:getx/util/tema.dart';
 import 'package:getx/util/util.dart';
@@ -14,10 +15,12 @@ class RowWithImageAndRating extends StatefulWidget {
     super.key,
     required this.size,
     required this.imagem,
+    required this.documentId,
   });
 
   final Size size;
   Widget imagem;
+  final String documentId;
 
   @override
   State<RowWithImageAndRating> createState() => _RowWithImageAndRatingState();
@@ -88,19 +91,44 @@ class _RowWithImageAndRatingState extends State<RowWithImageAndRating> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  RatingBar.builder(
-                    itemSize: 30,
-                    initialRating: 3,
-                    minRating: 1,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    itemBuilder: (context, _) => const Icon(
-                      Icons.star,
-                      color: Colors.amber,
-                    ),
-                    onRatingUpdate: (rating) {
-                      print(rating);
+                  FutureBuilder<double?>(
+                    future:
+                        GettersFirebase().calcularMediaNotas(widget.documentId),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        // If the future is still waiting for the data, return a loading indicator or a placeholder.
+                        return CircularProgressIndicator(); // You can customize the loading indicator as per your requirement.
+                      } else if (snapshot.hasError) {
+                        // If there's an error while fetching the data, handle the error here.
+                        return Text("Error: ${snapshot.error}");
+                      } else {
+                        // If the future has completed and the data is available, parse it to double.
+                        double rating = snapshot.data ?? 0.0 ?? 0.0;
+
+                        if (snapshot.data == null) {
+                          // If the data is null, handle it accordingly, e.g., show a message.
+                          return Text(
+                            "Sem avaliações.",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }
+
+                        return RatingBarIndicator(
+                          itemPadding:
+                              const EdgeInsets.symmetric(horizontal: 4.0),
+                          rating: rating,
+                          itemBuilder: (context, index) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 30.0,
+                          direction: Axis.horizontal,
+                        );
+                      }
                     },
                   ),
                 ],

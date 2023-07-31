@@ -9,6 +9,7 @@ class GetImagemPerfil extends StatelessWidget {
   BoxFit? fit;
 
   @override
+  
   Widget build(BuildContext context) {
     User? user = FirebaseAuth.instance.currentUser;
     final storageRef = FirebaseStorage.instance.ref();

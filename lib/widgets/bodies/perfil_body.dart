@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx/repositories/avalicoes_usuario.dart';
 import 'package:getx/repositories/get_image_perfil.dart';
 import 'package:getx/repositories/get_users_images.dart';
 import 'package:getx/views/portifolio.dart';
@@ -7,7 +8,6 @@ import 'package:getx/views/portifolio.dart';
 import 'package:getx/widgets/barbearias.dart';
 import 'package:getx/widgets/imagem_com_rating.dart';
 import 'package:getx/widgets/info_container.dart';
-import 'package:getx/widgets/scaffold_comentarios.dart';
 import 'package:getx/widgets/titulo_com_botao.dart';
 
 class PerfilBody extends StatelessWidget {
@@ -24,6 +24,7 @@ class PerfilBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             RowWithImageAndRating(
+              documentId: documentId,
               size: size,
               imagem: GetUsersImages(
                 documentId: documentId,
@@ -37,7 +38,7 @@ class PerfilBody extends StatelessWidget {
                   Get.to(() => Portifolio());
                 }),
             const Barbearias(),
-            ScaffoldComentarios(size: size)
+            CardAvaliacoes(size: size, idAvaliado: documentId)
           ],
         ),
       ]),

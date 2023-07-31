@@ -24,7 +24,7 @@ class Util {
     txtValor.text = '';
   }
 
-  //pega dados de TODAS as despesas do firebase e popula lista(sem filtro de tipo)
+  //pega dados de TODOS os usuarios do firebase e popula lista(sem filtro de tipo)
   Future<List<String>> getListaTotal(docIDs) async {
     docIDs.clear();
 

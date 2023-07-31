@@ -28,6 +28,15 @@ class _ProfissionaisEmDestaqueState extends State<ProfissionaisEmDestaque> {
             children: [
               TituloComBotao(title: 'Profissionais em destaque', press: () {}),
               Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 10),
+                      blurRadius: 50,
+                      color: kPrimaryColor.withOpacity(0.23),
+                    ),
+                  ],
+                ),
                 height: widget.size.height * 0.35,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
@@ -36,8 +45,10 @@ class _ProfissionaisEmDestaqueState extends State<ProfissionaisEmDestaque> {
                       return Column(
                         children: [
                           CardProfissionais(
-                            docIDs: docIDs,
-                            indice: indice,
+                            boxDecoration: const BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            docID: docIDs[indice],
                             espec: 'Projetos',
                             image: 'assets/images/Perfil.jpg',
                             country: "Estrelas",

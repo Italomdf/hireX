@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:getx/repositories/get_user_nome.dart';
 import 'package:getx/repositories/get_user_nome_completo.dart';
@@ -13,6 +14,7 @@ class InfoConatiner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user = FirebaseAuth.instance.currentUser;
     return Container(
       height: size.height * 0.3,
       decoration: const BoxDecoration(
@@ -52,6 +54,7 @@ class InfoConatiner extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GetUserNomeCompleto(
+                  userid: user!.uid,
                   prefixo: '',
                   sufixo: '',
                   style: TextStyle(

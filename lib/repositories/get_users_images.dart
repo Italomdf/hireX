@@ -11,7 +11,6 @@ class GetUsersImages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
     final storageRef = FirebaseStorage.instance.ref();
     var imageRef =
         storageRef.child('images/user/$documentId.jpg').getDownloadURL();
@@ -29,7 +28,7 @@ class GetUsersImages extends StatelessWidget {
             child: Icon(
               Icons.add_a_photo,
               color: kPrimaryColor,
-              size: 50,
+              size: 30,
             ),
           );
         } else {

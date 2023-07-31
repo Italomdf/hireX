@@ -1,41 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:getx/repositories/tools/getters_firebase.dart';
 
-class GetTextOverflow extends StatelessWidget {
-  final String documentId;
-  const GetTextOverflow({super.key, required this.documentId});
+//pega descrição das despesas no firebase
+class GetComentarioOverflow extends StatelessWidget {
+  GetComentarioOverflow(
+      {super.key,
+      this.style,
+      required this.prefixo,
+      required this.sufixo,
+      required this.userid,
+      required this.idAvaliado,
+      required this.campo,
+      this.overflow});
+  TextStyle? style;
+  String? prefixo;
+  String? sufixo;
+  TextOverflow? overflow;
+  String? userid;
+  String? idAvaliado;
+  String? campo;
 
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('pt_BR', null);
-
-    User? user = FirebaseAuth.instance.currentUser;
-    CollectionReference despesas = FirebaseFirestore.instance
-        .collection('users')
-        .doc(user!.uid)
-        .collection('despesas');
-
-    return FutureBuilder<DocumentSnapshot>(
-      future: despesas.doc(documentId).get(),
+    return FutureBuilder<String?>(
+      future: GettersFirebase().getAvaliacaoStrings(userid, campo, idAvaliado),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
-          Timestamp timestamp = data['data'];
-          DateTime dateTime = timestamp.toDate();
-          var formattedDate = DateFormat('E, d MMM yyyy', 'pt_BR')
-              .format(dateTime); // Convert Timestamp to DateTime
           return Text(
-            '{$formattedDate aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+            '${snapshot.data}',
+            style: style,
             softWrap: true,
             maxLines: 4,
             overflow: TextOverflow.ellipsis,
           );
         }
-        return const Text('Carregando...');
+        return Text('Carregando...', style: style);
       },
     );
   }

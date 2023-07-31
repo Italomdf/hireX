@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:getx/repositories/tools/getters_firebase.dart';
 
 //pega descrição das despesas no firebase
 class GetUserSobrenome extends StatelessWidget {
@@ -15,19 +16,10 @@ class GetUserSobrenome extends StatelessWidget {
   String? sufixo;
   TextOverflow? overflow;
 
-  Future<String?> getDespesaDescricao() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-    DocumentSnapshot snapshot = await users.doc(user!.uid).get();
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    return data['sobrenome'] as String?;
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-      future: getDespesaDescricao(),
+      future: GettersFirebase().getUserSobreNome(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           return Text(

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:getx/repositories/tools/getters_firebase.dart';
 
 //pega descrição das despesas no firebase
 class GetUserNomeCompleto extends StatelessWidget {
@@ -9,38 +10,22 @@ class GetUserNomeCompleto extends StatelessWidget {
       this.style,
       required this.prefixo,
       required this.sufixo,
+      required this.userid,
       this.overflow});
   TextStyle? style;
   String? prefixo;
   String? sufixo;
   TextOverflow? overflow;
-
-  Future<Map<String, String?>> getDespesaDescricao() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-    DocumentSnapshot snapshot = await users.doc(user!.uid).get();
-    Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-    String? nome = data['nome'] as String?;
-    String? sobrenome = data['sobrenome'] as String?;
-
-    return {
-      'nome': nome,
-      'sobrenome': sobrenome,
-    };
-  }
+  String? userid;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, String?>>(
-      future: getDespesaDescricao(),
+    return FutureBuilder<String?>(
+      future: GettersFirebase().getUserNomeCompleto(userid),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          String? nome = snapshot.data?['nome'];
-          String? sobrenome = snapshot.data?['sobrenome'];
-
           return Text(
-            '$prefixo$nome $sobrenome$sufixo',
+            '${snapshot.data}',
             style: style,
             overflow: overflow,
             maxLines: 1,

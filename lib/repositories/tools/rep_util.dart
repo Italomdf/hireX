@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx/repositories/get_user_nome.dart';
+import 'package:getx/repositories/get_user_nome_completo.dart';
+import 'package:getx/repositories/tools/getters_firebase.dart';
 import 'package:getx/util/tema.dart';
 import 'package:getx/util/util.dart';
 import 'package:getx/views/home.dart';
@@ -19,7 +22,8 @@ class UtilRepository {
 
   //retorna o tipo de usuario (profissional ou cliente)
   Future<String?> _verificaTipo() async {
-    DocumentSnapshot snapshot = await users.doc(currentUser!.uid).get();
+    User? usuario = await FirebaseAuth.instance.currentUser;
+    DocumentSnapshot snapshot = await users.doc(usuario!.uid).get();
     Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
     data['tipo'] as String?;
     String? tipo = data['tipo'] as String?;
@@ -43,6 +47,7 @@ class UtilRepository {
 
   //loga o usuario
   Future<String?> loginUser(email, senha) async {
+    User? usuario = await FirebaseAuth.instance.currentUser;
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
@@ -59,7 +64,7 @@ class UtilRepository {
       Get.showSnackbar(
         GetSnackBar(
           backgroundColor: kPrimaryColor,
-          message: 'Bem vindo ${currentUser!.email}.',
+          message: 'Bem vindo ${usuario!.email}.',
           icon: const Icon(
             Icons.person,
             color: Colors.white,
@@ -278,5 +283,46 @@ class UtilRepository {
       if (user != null) {}
     });
     return null;
+  }
+
+  Future<String?> criaComentario(userId) async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(currentUser!.uid)
+        .collection("avaliacoes-realizadas")
+        .doc(userId)
+        .set({
+      "comentario": "oi",
+      "nota": 4,
+      "nome": await GettersFirebase().getUserNomeCompleto(userId),
+      "userID": userId
+    });
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .collection("avaliacoes")
+        .doc(currentUser!.uid)
+        .set({
+      "comentario": "oi",
+      "nota": 4,
+      "nome": await GettersFirebase().getUserNomeCompleto(currentUser!.uid),
+      "userID": currentUser!.uid
+    });
+
+    return null;
+  }
+
+  //retorna uma lista com ids de todos os usuarios
+  Future<List<String>> getListaUsuarios(docIDs) async {
+    docIDs.clear();
+
+    var snapshot = await FirebaseFirestore.instance.collection('users').get();
+
+    for (var document in snapshot.docs) {
+      docIDs.add(document.reference.id);
+    }
+
+    return docIDs;
   }
 }
